@@ -10,21 +10,26 @@
 #include <QKeyEvent>
 #include <QRandomGenerator>
 
-GameArea::GameArea(QObject* parent):
+GameArea::GameArea(NextBlock &nextblockscene, QObject* parent):
     QGraphicsScene(parent)
 {
+    nextBlockScene_ = &nextblockscene;
     setSceneRect(10,10, 220,460);
     blockMatrixPtr_ = new blockMatrix();
     connect(blockMatrixPtr_, &blockMatrix::removeSquare, this, &GameArea::removeSquare);
+    connect(this, &GameArea::tetrominoChanged, nextBlockScene_, &NextBlock::updateNextBlock);
+
+    nextTetromino_ = QRandomGenerator::global()->bounded(16384)%6;
 }
 
 void GameArea::addTetromino()
 {
-    int randomNumber = QRandomGenerator::global()->bounded(16384)%2;
     activeTetromino_ = new Tetromino();
-    connect(activeTetromino_, &Tetromino::addSquare, this, &GameArea::addSquare);
+    connect(activeTetromino_, &Tetromino::addSquareToScene, this, &GameArea::addSquareToScene);
     connect(activeTetromino_, &Tetromino::blockStopped, this, &GameArea::addTetromino);
-    activeTetromino_->setType(randomNumber);
+    activeTetromino_->setType(nextTetromino_);
+    nextTetromino_ = QRandomGenerator::global()->bounded(16384)%6;
+    emit tetrominoChanged(nextTetromino_);
 }
 
 bool GameArea::isOutOfBounds(int x)
@@ -97,8 +102,12 @@ void GameArea::tetrominoTryRight()
 
 void GameArea::tetrominoTryTurn()
 {
-    qDebug() << "pyöritettään";
     activeTetromino_->tetrominoTurn();
+}
+
+void GameArea::togglePauseSituation(bool isPaused)
+{
+    keyPressIgnore_ = isPaused;
 }
 
 QPoint GameArea::getPos(QGraphicsRectItem* item)
@@ -110,16 +119,21 @@ QPoint GameArea::getPos(QGraphicsRectItem* item)
 
 void GameArea::keyPressEvent(QKeyEvent * event)
 {
-    switch ( event->key() ) {
-    case Qt::Key_Left:
-        tetrominoTryLeft();
-        break;
-    case Qt::Key_Right:
-        tetrominoTryRight();
-        break;
-    case Qt::Key_Z:
-        tetrominoTryTurn();
-        break;
+    if ( keyPressIgnore_ ) {
+        event->ignore();
+    }
+    else {
+        switch ( event->key() ) {
+        case Qt::Key_Left:
+            tetrominoTryLeft();
+            break;
+        case Qt::Key_Right:
+            tetrominoTryRight();
+            break;
+        case Qt::Key_Z:
+            tetrominoTryTurn();
+            break;
+        }
     }
 }
 
@@ -128,7 +142,7 @@ void GameArea::removeSquare(QGraphicsRectItem *square)
     removeItem(square);
 }
 
-void GameArea::addSquare(QGraphicsRectItem *square, QPointF coord, QBrush color)
+void GameArea::addSquareToScene(QGraphicsRectItem *square, QPointF coord, QBrush color)
 {
     square->setPen(black);
     square->setBrush(color);

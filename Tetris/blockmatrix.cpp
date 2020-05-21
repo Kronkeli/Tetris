@@ -29,13 +29,11 @@ void blockMatrix::addSquares(std::vector<QGraphicsRectItem*> squares )
 
 bool blockMatrix::isSpaceAvailable(QPoint point)
 {
-//    qDebug() << "PISTEET Y: " << point.y() << "JA X: " << point.x();
     return blockMatrix_[point.y()][point.x()] == nullptr;
 }
 
 void blockMatrix::checkRows()
 {
-    qDebug() << "checkataan rivit ja tehdään juttuja";
     bool rowComplete;
     std::vector<int> completeRows;
 
@@ -48,42 +46,16 @@ void blockMatrix::checkRows()
         }
         if ( rowComplete ) {
             deleteRow(row);
-//            for ( int row_up = row; row_up < 24; row_up++ ) {
-//                for ( int column = 0; column < 12; column++ ) {
-//                    blockMatrix_[row_up][column]->moveBy(0, 20);
-//                }
-//            }
-//            for ( int column = 0; column < 12; column++ ) {
-//                QGraphicsRectItem* square = blockMatrix_[row][column];
-//                removeItem(square);
-//                delete(square);
-//            }
-
-//            // Poistetaan valmiiden palojen ruudukosta tyhjä rivi ja asetetaan perään uusi tyhjä rivi
-//            for ( auto row : completeRows ) {
-//                for ()
-//            }
-////            completeRows.push_back(row);
-////            for ( int column = 0; column < 12; column++ ) {
-
-////                QGraphicsRectItem* square = blockMatrix_[row][column];
-//////                blockMatrix_[row][column] = nullptr;
-////                removeItem(square);
-////                delete(square);
-
-////            }
         }
     }
 }
 
 void blockMatrix::deleteRow(int rowNum)
 {
-    qDebug() << "deleteRow alussa rivillä: " << rowNum;
 
     // Siirretään muut palikat ylempänä alaspäin
     for ( int row_up = rowNum; row_up > 0; row_up-- ) {
         for ( int column = 0; column < 12; column++ ) {
-            qDebug() << "mitä tapahtuu?";
             if ( blockMatrix_[row_up][column] != nullptr ) {
                 blockMatrix_[row_up][column]->moveBy(0,20);
             }

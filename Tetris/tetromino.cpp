@@ -17,7 +17,6 @@ void Tetromino::moveDown()
         square->moveBy(0,20);
     }
     weightPoint_.setY( weightPoint_.y() + 20 );
-    qDebug() << weightPoint_.y();
 }
 
 void Tetromino::moveLeft()
@@ -40,31 +39,12 @@ void Tetromino::tetrominoTurn()
 {
     float dx;
     float dy;
-    std::string juu = "orientaatio: " + ORIENTATION[orientation_];
-    qDebug() << QString::fromStdString(juu);
     for ( QGraphicsRectItem* square : squares ) {
         dx = weightPoint_.x() - square->x();
         dy = weightPoint_.y() - square->y();
-        std::string orient = ORIENTATION[orientation_];
-        if ( orient == "UP" ) {
             square->setX( weightPoint_.x() + dy );
             square->setY( weightPoint_.y() - dx );
-        }
-        else if ( orient == "RIGHT" ) {
-            square->setX( weightPoint_.y() + dy );
-            square->setY( weightPoint_.x() - dx );
-        }
-        else if ( orient == "DOWN" ) {
-            square->setX( weightPoint_.x() + dy);
-            square->setY( weightPoint_.x() - dx);
-        }
-        else if ( orient == "LEFT") {
-            square->setX( weightPoint_.x() + dy );
-            square->setY( weightPoint_.y() - dx );
-        }
-
     }
-    orientation_ = ( orientation_ + 1 ) % 4;
 }
 
 void Tetromino::setType(int number)
@@ -74,18 +54,17 @@ void Tetromino::setType(int number)
     for ( int i = 0; i < 4; i++ ) {
         squares.push_back( new QGraphicsRectItem(0, 0, SIZE, SIZE) );
     }
-    orientation_ = 0;
     if ( type == "I" ) {
         for ( int i = 0; i < 4; i++ ) {
-            emit addSquare(squares[i], {100 + i*20, 0}, blue);
+            emit addSquareToScene(squares[i], {100 + i*20, 0}, blue);
         }
-        weightPoint_ = {110, 30};
+        weightPoint_ = {130, 10};
     }
     else if ( type == "O" ) {
         int index = 0;
         for ( int i = 0; i < 2; i++ ) {
             for ( int j = 0; j < 2; j++ ) {
-                emit addSquare(squares[index], {120 + i*20, j*20}, yellow);
+                emit addSquareToScene(squares[index], {120 + i*20, j*20}, yellow);
                 index++;
             }
         }
@@ -93,38 +72,44 @@ void Tetromino::setType(int number)
     }
     else if ( type == "T" ) {
         for ( auto i = 0; i < 3; i++ ) {
-            emit addSquare(squares[i], {120 + i*20, 0}, purple);
+            emit addSquareToScene(squares[i], {120 + i*20, 20}, purple);
         }
-        emit addSquare( squares[3], {140, 20}, purple );
+        emit addSquareToScene( squares[3], {140, 0}, purple );
+        weightPoint_ = { 140, 20 };
     }
     else if ( type == "J" ) {
         for ( auto i = 0; i < 3; i++ ) {
-            emit addSquare(squares[i], {140, i*20}, darkblue );
+            emit addSquareToScene(squares[i], {140, i*20}, darkblue );
         }
-        emit addSquare( squares[3], {120, 40}, darkblue );
+        emit addSquareToScene( squares[3], {120, 40}, darkblue );
+        weightPoint_ = { 140, 20 };
     }
     else if ( type == "L" ) {
         for ( auto i = 0; i < 3; i++ ) {
-            emit addSquare(squares[i], {140, i*20}, orange);
+            emit addSquareToScene(squares[i], {140, i*20}, orange);
         }
-        emit addSquare( squares[3], {160, 40}, orange );
+        emit addSquareToScene( squares[3], {160, 40}, orange );
+        weightPoint_ = { 140, 20 };
     }
     else if ( type == "S" ) {
         int index = 0;
         for ( auto i = 0; i < 2; i++ ) {
             for ( auto j = 0; j < 2; j++ ) {
-                emit addSquare(squares[index], {140 + index*20 -i*20, 20 - i*20}, green);
+                emit addSquareToScene(squares[index], {140 + index*20 -i*20, 20 - i*20}, green);
                 index++;
             }
         }
+        weightPoint_ = { 160, 20 };
     }
     else if ( type == "Z" ) {
         int index = 0;
         for ( auto i = 0; i < 2; i++ ) {
             for ( auto j = 0; j < 2; j++ ) {
-                emit addSquare( squares[index], {140 + index*20 - i*20, i*20}, red );
+                emit addSquareToScene( squares[index], {140 + index*20 - i*20, i*20}, red );
+                index++;
             }
         }
+        weightPoint_ = { 160, 20 };
     }
 }
 

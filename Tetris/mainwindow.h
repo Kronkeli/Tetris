@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include "gamearea.h"
+#include "nextblock.h"
 
 #include <QMainWindow>
 #include <QGraphicsScene>
@@ -13,7 +14,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(GameArea &scene_, QWidget *parent = nullptr);
+    MainWindow(GameArea &scene_, NextBlock &nextblockscene, QWidget *parent = nullptr);
 
 public slots:
 
@@ -23,11 +24,14 @@ public slots:
 signals:
 
     void gameStarted();
+    void togglePause(bool isPaused);
 
 private:
     QGraphicsView view_;
+    QGraphicsView nextBlockView_;
 
     GameArea* scene_;
+    NextBlock* nextBlockScene_;
 
     QTimer* timer_;
 

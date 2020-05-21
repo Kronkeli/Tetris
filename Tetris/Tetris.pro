@@ -20,10 +20,12 @@ SOURCES += \
     gamearea.cpp \
     main.cpp \
     mainwindow.cpp \
+    nextblock.cpp \
     tetromino.cpp
 
 HEADERS += \
     blockmatrix.h \
     gamearea.h \
     mainwindow.h \
+    nextblock.h \
     tetromino.h

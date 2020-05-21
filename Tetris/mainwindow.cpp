@@ -9,19 +9,29 @@
 #include <QVBoxLayout>
 #include <QKeyEvent>
 
-MainWindow::MainWindow(GameArea &scene, QWidget *parent):
+MainWindow::MainWindow(GameArea &scene, NextBlock &nextblockscene, QWidget *parent):
     QMainWindow(parent),
-    view_(this)
+    view_(this),
+    nextBlockView_(this)
 {
     setWindowTitle("Ebin Tetris Game");
+    this->resize(500,600);
+
+    // View and scene for gamearea
     view_.setScene(&scene);
     scene_ = &scene;
-
-    this->resize(1000,1000);
-    // Constructing the graphicsview for the tetrominos
     view_.setGeometry(40,40,240,480);
-
     view_.show();
+
+    // View and scene for nextblock
+    nextBlockView_.setScene(&nextblockscene);
+    nextBlockScene_ = &nextblockscene;
+    nextBlockView_.setGeometry(300, 60, 60, 60);
+    nextBlockView_.show();
+
+    QTextBrowser* nextBlockText = new QTextBrowser(this);
+    nextBlockText->setText("Seuraava:");
+    nextBlockText->setGeometry(300, 40, 80, 20);
 
     timer_ = new QTimer(this);
 
@@ -41,13 +51,15 @@ MainWindow::MainWindow(GameArea &scene, QWidget *parent):
     wdg->setLayout(vlay);
 
     scene.addWidget(wdg);
-    wdg->setGeometry(600,150,150,300);
+    wdg->setGeometry(300,150,150,150);
 
     // Connecting signals
     connect(btn1, &QPushButton::clicked, this, &MainWindow::startGame);
+    connect(btn2, &QPushButton::clicked, this, &MainWindow::pauseGame);
+    connect(btn3, &QPushButton::clicked, this, &MainWindow::close);
     connect(this, &MainWindow::gameStarted, scene_, &GameArea::addTetromino);
     connect(timer_, &QTimer::timeout, scene_, &GameArea::tetrominoFall);
-    connect(btn2, &QPushButton::clicked, this, &MainWindow::pauseGame);
+    connect(this, &MainWindow::togglePause, scene_, &GameArea::togglePauseSituation);
 }
 
 void MainWindow::startGame()
@@ -66,6 +78,7 @@ void MainWindow::pauseGame()
         timer_->start(interval_);
         isPaused_ = false;
     }
+    emit togglePause(isPaused_);
 }
 
 

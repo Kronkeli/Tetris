@@ -29,13 +29,6 @@ const std::vector<std::string> TETROMINOS {
     "Z"
 };
 
-const std::vector<std::string> ORIENTATION {
-    "UP",
-    "RIGHT",
-    "DOWN",
-    "LEFT"
-};
-
 class Tetromino : public QObject
 {
     Q_OBJECT
@@ -57,15 +50,13 @@ public:
     std::vector<QGraphicsRectItem*> squares;
 
 signals:
-    void addSquare(QGraphicsRectItem* square, QPoint coord, QBrush color);
+    void addSquareToScene(QGraphicsRectItem* square, QPoint coord, QBrush color);
 
     void blockStopped();
 
 private:
 
     QPointF weightPoint_;
-
-    int orientation_;
 };
 
 #endif // SQUARE_H
