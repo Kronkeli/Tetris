@@ -7,8 +7,9 @@
 #include <QMainWindow>
 #include <iostream>
 
-Tetromino::Tetromino()
+Tetromino::Tetromino(QPointF coordinate)
 {
+    pointOfCreation_ = coordinate;
 }
 
 void Tetromino::moveDown()
@@ -50,66 +51,68 @@ void Tetromino::tetrominoTurn()
 void Tetromino::setType(int number)
 {
     std::string type = TETROMINOS[number];
+    qreal x = pointOfCreation_.x();
+    qreal y = pointOfCreation_.y();
 
     for ( int i = 0; i < 4; i++ ) {
         squares.push_back( new QGraphicsRectItem(0, 0, SIZE, SIZE) );
     }
     if ( type == "I" ) {
         for ( int i = 0; i < 4; i++ ) {
-            emit addSquareToScene(squares[i], {100 + i*20, 0}, blue);
+            emit addSquareToScene(squares[i], { x - 20 + i*20, y}, blue);
         }
-        weightPoint_ = {130, 10};
+        weightPoint_ = {x + 10, y + 10};
     }
     else if ( type == "O" ) {
         int index = 0;
         for ( int i = 0; i < 2; i++ ) {
             for ( int j = 0; j < 2; j++ ) {
-                emit addSquareToScene(squares[index], {120 + i*20, j*20}, yellow);
+                emit addSquareToScene(squares[index], {x + i*20, y + j*20}, yellow);
                 index++;
             }
         }
-        weightPoint_ = { 130, 10 };
+        weightPoint_ = { x + 10, y +10 };
     }
     else if ( type == "T" ) {
         for ( auto i = 0; i < 3; i++ ) {
-            emit addSquareToScene(squares[i], {120 + i*20, 20}, purple);
+            emit addSquareToScene(squares[i], {x + i*20, y + 20}, purple);
         }
-        emit addSquareToScene( squares[3], {140, 0}, purple );
-        weightPoint_ = { 140, 20 };
+        emit addSquareToScene( squares[3], {x + 20, y}, purple );
+        weightPoint_ = { x + 20, y + 20 };
     }
     else if ( type == "J" ) {
         for ( auto i = 0; i < 3; i++ ) {
-            emit addSquareToScene(squares[i], {140, i*20}, darkblue );
+            emit addSquareToScene(squares[i], {x + 20, y + i*20}, darkblue );
         }
-        emit addSquareToScene( squares[3], {120, 40}, darkblue );
-        weightPoint_ = { 140, 20 };
+        emit addSquareToScene( squares[3], {x , y + 40}, darkblue );
+        weightPoint_ = { x + 20, y + 20 };
     }
     else if ( type == "L" ) {
         for ( auto i = 0; i < 3; i++ ) {
-            emit addSquareToScene(squares[i], {140, i*20}, orange);
+            emit addSquareToScene(squares[i], {x, y + i*20}, orange);
         }
-        emit addSquareToScene( squares[3], {160, 40}, orange );
-        weightPoint_ = { 140, 20 };
+        emit addSquareToScene( squares[3], {x + 20, y + 40}, orange );
+        weightPoint_ = { x , y + 20 };
     }
     else if ( type == "S" ) {
         int index = 0;
         for ( auto i = 0; i < 2; i++ ) {
             for ( auto j = 0; j < 2; j++ ) {
-                emit addSquareToScene(squares[index], {140 + index*20 -i*20, 20 - i*20}, green);
+                emit addSquareToScene(squares[index], {x + index*20 -i*20, y + 20 - i*20}, green);
                 index++;
             }
         }
-        weightPoint_ = { 160, 20 };
+        weightPoint_ = { x + 20, y };
     }
     else if ( type == "Z" ) {
         int index = 0;
         for ( auto i = 0; i < 2; i++ ) {
             for ( auto j = 0; j < 2; j++ ) {
-                emit addSquareToScene( squares[index], {140 + index*20 - i*20, i*20}, red );
+                emit addSquareToScene( squares[index], {x + index*20 - i*20, y + i*20}, red );
                 index++;
             }
         }
-        weightPoint_ = { 160, 20 };
+        weightPoint_ = { x + 20, y };
     }
 }
 

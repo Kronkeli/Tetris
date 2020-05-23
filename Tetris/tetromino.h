@@ -33,7 +33,7 @@ class Tetromino : public QObject
 {
     Q_OBJECT
 public:
-    Tetromino();
+    Tetromino(QPointF coordinate);
 
     void setType(int number);
 
@@ -50,13 +50,15 @@ public:
     std::vector<QGraphicsRectItem*> squares;
 
 signals:
-    void addSquareToScene(QGraphicsRectItem* square, QPoint coord, QBrush color);
+    void addSquareToScene(QGraphicsRectItem* square, QPointF coord, QBrush color);
 
     void blockStopped();
 
 private:
 
     QPointF weightPoint_;
+
+    QPointF pointOfCreation_;
 };
 
 #endif // SQUARE_H

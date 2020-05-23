@@ -26,7 +26,7 @@ MainWindow::MainWindow(GameArea &scene, NextBlock &nextblockscene, QWidget *pare
     // View and scene for nextblock
     nextBlockView_.setScene(&nextblockscene);
     nextBlockScene_ = &nextblockscene;
-    nextBlockView_.setGeometry(300, 60, 60, 60);
+    nextBlockView_.setGeometry(300, 60, 80, 80);
     nextBlockView_.show();
 
     QTextBrowser* nextBlockText = new QTextBrowser(this);

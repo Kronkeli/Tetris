@@ -19,16 +19,30 @@ GameArea::GameArea(NextBlock &nextblockscene, QObject* parent):
     connect(blockMatrixPtr_, &blockMatrix::removeSquare, this, &GameArea::removeSquare);
     connect(this, &GameArea::tetrominoChanged, nextBlockScene_, &NextBlock::updateNextBlock);
 
-    nextTetromino_ = QRandomGenerator::global()->bounded(16384)%6;
+    nextTetromino_ = QRandomGenerator::global()->bounded(16384)%7;
+
+//    QPen black(Qt::black);
+//    QBrush yellow(Qt::yellow);
+//    QBrush red(Qt::red);
+//    QBrush blue(Qt::blue);
+//    QBrush darkblue(Qt::darkBlue);
+//    QGraphicsRectItem* s1 = addRect(0,0,20,20,black, darkblue);
+//    s1->setPos(80,0);
+//    QGraphicsRectItem* s2 = addRect(0,0,20,20,black, yellow);
+//    s2->setPos(100,0);
+//    QGraphicsRectItem* s3 = addRect(0,0,20,20,black, red);
+//    s3->setPos(120,0);
+//    QGraphicsRectItem* s4 = addRect(0,0,20,20,black, blue);
+//    s4->setPos(140,0);
 }
 
 void GameArea::addTetromino()
 {
-    activeTetromino_ = new Tetromino();
+    activeTetromino_ = new Tetromino({100, 0});
     connect(activeTetromino_, &Tetromino::addSquareToScene, this, &GameArea::addSquareToScene);
     connect(activeTetromino_, &Tetromino::blockStopped, this, &GameArea::addTetromino);
     activeTetromino_->setType(nextTetromino_);
-    nextTetromino_ = QRandomGenerator::global()->bounded(16384)%6;
+    nextTetromino_ = QRandomGenerator::global()->bounded(16384)%7;
     emit tetrominoChanged(nextTetromino_);
 }
 
@@ -107,7 +121,7 @@ void GameArea::tetrominoTryTurn()
 
 void GameArea::togglePauseSituation(bool isPaused)
 {
-    keyPressIgnore_ = isPaused;
+//    keyPressIgnore_ = isPaused;
 }
 
 QPoint GameArea::getPos(QGraphicsRectItem* item)
