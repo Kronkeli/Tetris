@@ -75,3 +75,18 @@ void blockMatrix::deleteRow(int rowNum)
         }
         blockMatrix_.insert(begin, row);
 }
+
+void blockMatrix::clearData()
+{
+    QGraphicsRectItem* squarePtr;
+    for ( int rowNum = 0; rowNum < 25; rowNum++ ) {
+        for ( int columnNum = 0; columnNum < 12; columnNum++ ) {
+            squarePtr = blockMatrix_[rowNum][columnNum];
+            if ( squarePtr != nullptr ) {
+                emit removeSquare(squarePtr);
+                delete(squarePtr);
+                blockMatrix_[rowNum][columnNum] = nullptr;
+            }
+        }
+    }
+}

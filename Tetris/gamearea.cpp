@@ -15,6 +15,7 @@ GameArea::GameArea(NextBlock &nextblockscene, QObject* parent):
 {
     nextBlockScene_ = &nextblockscene;
     setSceneRect(10,10, 220,460);
+
     blockMatrixPtr_ = new blockMatrix();
     connect(blockMatrixPtr_, &blockMatrix::removeSquare, this, &GameArea::removeSquare);
     connect(this, &GameArea::tetrominoChanged, nextBlockScene_, &NextBlock::updateNextBlock);
@@ -43,8 +44,11 @@ void GameArea::addTetromino()
     connect(activeTetromino_, &Tetromino::addSquareToScene, this, &GameArea::addSquareToScene);
     connect(activeTetromino_, &Tetromino::blockStopped, this, &GameArea::addTetromino);
     activeTetromino_->setType(nextTetromino_);
-//    nextTetromino_ = QRandomGenerator::global()->bounded(16384)%7;
-    nextTetromino_ = 0;
+    if ( isGameOver( activeTetromino_ ) == true ) {
+        qDebug() << "is over";
+        emit gameOver();
+    }
+    nextTetromino_ = QRandomGenerator::global()->bounded(16384)%7;
     emit tetrominoChanged(nextTetromino_);
 }
 
@@ -121,7 +125,6 @@ void GameArea::tetrominoTryTurn()
     activeTetromino_->tetrominoTurn();
     QPoint pos;
     bool inArea = false;
-//    while( !inArea ) {
         for ( QGraphicsRectItem* square : activeTetromino_->squares ) {
             pos = getPos( square );
             qDebug() << "sijainti: " << pos.x();
@@ -137,7 +140,6 @@ void GameArea::tetrominoTryTurn()
                 activeTetromino_->moveLeft();
             }
         }
-//    }
 }
 
 void GameArea::togglePauseSituation(bool isPaused)
@@ -186,4 +188,22 @@ void GameArea::addSquareToScene(QGraphicsRectItem *square, QPointF coord, QBrush
     square->setBrush(color);
     addItem(square);
     square->setPos(coord);
+}
+
+bool GameArea::isGameOver(Tetromino* tetromino)
+{
+    QPoint point;
+    bool canBeAdded = true;
+    for (QGraphicsRectItem* square : tetromino->squares ) {
+        point = getPos(square);
+        if ( !blockMatrixPtr_->isSpaceAvailable( point ) ) {
+            canBeAdded = false;
+        }
+    }
+    return !canBeAdded;
+}
+
+void GameArea::restartScene()
+{
+    blockMatrixPtr_->clearData();
 }

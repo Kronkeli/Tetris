@@ -14,7 +14,6 @@ public:
 
 public slots:
     void updateNextBlock(int nextTetromino);
-
     void addSquareToScene(QGraphicsRectItem* square, QPointF coord, QBrush color);
 
 };

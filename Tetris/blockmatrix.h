@@ -13,14 +13,11 @@ public:
     blockMatrix();
 
     void addSquares(std::vector<QGraphicsRectItem*> squares);
-
     bool isSpaceAvailable(QPoint point);
-
     void checkRows();
-
     bool isRowComplete();
-
     void deleteRow(int rowNum);
+    void clearData();
 
 signals:
 

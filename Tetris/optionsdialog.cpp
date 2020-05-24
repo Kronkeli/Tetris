@@ -20,8 +20,8 @@ OptionsDialog::OptionsDialog(QWidget *parent):
     difficulties_->addItem("heleeeeepoin");
     vlay->addWidget(difficulties_);
 
-    QPushButton *okButton = new QPushButton("OK");
-    connect( okButton, &QPushButton::clicked, this, &OptionsDialog::okClicked );
+    QPushButton *okButton = new QPushButton("OK", this);
+    connect(okButton, &QPushButton::clicked, this, &OptionsDialog::okClicked);
     vlay->addWidget(okButton);
     wdg->setLayout(vlay);
 }

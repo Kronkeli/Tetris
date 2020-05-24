@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     blockmatrix.cpp \
+    enddialog.cpp \
     gamearea.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -26,6 +27,7 @@ SOURCES += \
 
 HEADERS += \
     blockmatrix.h \
+    enddialog.h \
     gamearea.h \
     mainwindow.h \
     nextblock.h \

@@ -22,6 +22,8 @@ public slots:
     void pauseGame();
     void showOptionsDialog();
     void setDifficulty(int interval);
+    void endGame();
+    void gameOver(bool playAgain);
 
 signals:
 
