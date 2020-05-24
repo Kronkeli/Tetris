@@ -1,5 +1,7 @@
 #include "mainwindow.h"
+#include "optionsdialog.h"
 
+#include <QDialog>
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QTimer>
@@ -42,12 +44,14 @@ MainWindow::MainWindow(GameArea &scene, NextBlock &nextblockscene, QWidget *pare
     QWidget * wdg = new QWidget(this);
 
     QVBoxLayout *vlay = new QVBoxLayout(wdg);
-    QPushButton *btn1 = new QPushButton("Start");
+    QPushButton *btn1 = new QPushButton("Aloita");
     vlay->addWidget(btn1);
-    QPushButton *btn2 = new QPushButton("Pause");
+    QPushButton *btn2 = new QPushButton("Tauko");
     vlay->addWidget(btn2);
-    QPushButton *btn3 = new QPushButton("Exit");
+    QPushButton *btn3 = new QPushButton("Vaikeustaso");
     vlay->addWidget(btn3);
+    QPushButton *btn4 = new QPushButton("Lopeta");
+    vlay->addWidget(btn4);
     wdg->setLayout(vlay);
 
     scene.addWidget(wdg);
@@ -56,7 +60,8 @@ MainWindow::MainWindow(GameArea &scene, NextBlock &nextblockscene, QWidget *pare
     // Connecting signals
     connect(btn1, &QPushButton::clicked, this, &MainWindow::startGame);
     connect(btn2, &QPushButton::clicked, this, &MainWindow::pauseGame);
-    connect(btn3, &QPushButton::clicked, this, &MainWindow::close);
+    connect(btn3, &QPushButton::clicked, this, &MainWindow::showOptionsDialog);
+    connect(btn4, &QPushButton::clicked, this, &MainWindow::close);
     connect(this, &MainWindow::gameStarted, scene_, &GameArea::addTetromino);
     connect(timer_, &QTimer::timeout, scene_, &GameArea::tetrominoFall);
     connect(this, &MainWindow::togglePause, scene_, &GameArea::togglePauseSituation);
@@ -65,6 +70,7 @@ MainWindow::MainWindow(GameArea &scene, NextBlock &nextblockscene, QWidget *pare
 void MainWindow::startGame()
 {
     timer_->start(interval_);
+    isPaused_ = false;
     emit gameStarted();
 }
 
@@ -79,6 +85,23 @@ void MainWindow::pauseGame()
         isPaused_ = false;
     }
     emit togglePause(isPaused_);
+}
+
+void MainWindow::showOptionsDialog()
+{
+    if ( !isPaused_ ) {
+        pauseGame();
+    }
+    OptionsDialog* dialog = new OptionsDialog(this);
+    connect(dialog, &OptionsDialog::setDifficulty, this, &MainWindow::setDifficulty );
+    dialog->exec();
+    pauseGame();
+}
+
+void MainWindow::setDifficulty(int interval)
+{
+    interval_ = interval;
+    timer_->setInterval(interval);
 }
 
 

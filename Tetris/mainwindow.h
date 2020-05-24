@@ -20,6 +20,8 @@ public slots:
 
     void startGame();
     void pauseGame();
+    void showOptionsDialog();
+    void setDifficulty(int interval);
 
 signals:
 
@@ -27,6 +29,7 @@ signals:
     void togglePause(bool isPaused);
 
 private:
+
     QGraphicsView view_;
     QGraphicsView nextBlockView_;
 
@@ -35,8 +38,8 @@ private:
 
     QTimer* timer_;
 
-    bool isPaused_ = false;
+    bool isPaused_ = true;
 
-    int interval_ = 100;
+    int interval_ = 300;
 };
 #endif // MAINWINDOW_H

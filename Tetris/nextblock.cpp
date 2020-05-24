@@ -10,16 +10,15 @@ NextBlock::NextBlock(QObject* parent):
 
 void NextBlock::updateNextBlock(int nexttetromino)
 {
-    qDebug() << "tyyppi" << nexttetromino;
     clear();
     Tetromino* nextTetromino = new Tetromino( { 20, 20 } );
     connect(nextTetromino, &Tetromino::addSquareToScene, this, &NextBlock::addSquareToScene);
     nextTetromino->setType(nexttetromino);
+    delete nextTetromino;
 }
 
 void NextBlock::addSquareToScene(QGraphicsRectItem *square, QPointF coord, QBrush color)
 {
-    qDebug() <<"täällä";
     square->setPen(black);
     square->setBrush(color);
     addItem(square);

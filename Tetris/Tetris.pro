@@ -21,6 +21,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     nextblock.cpp \
+    optionsdialog.cpp \
     tetromino.cpp
 
 HEADERS += \
@@ -28,4 +29,5 @@ HEADERS += \
     gamearea.h \
     mainwindow.h \
     nextblock.h \
+    optionsdialog.h \
     tetromino.h

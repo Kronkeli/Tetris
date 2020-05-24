@@ -21,15 +21,15 @@ GameArea::GameArea(NextBlock &nextblockscene, QObject* parent):
 
     nextTetromino_ = QRandomGenerator::global()->bounded(16384)%7;
 
-//    QPen black(Qt::black);
-//    QBrush yellow(Qt::yellow);
-//    QBrush red(Qt::red);
-//    QBrush blue(Qt::blue);
-//    QBrush darkblue(Qt::darkBlue);
-//    QGraphicsRectItem* s1 = addRect(0,0,20,20,black, darkblue);
-//    s1->setPos(80,0);
-//    QGraphicsRectItem* s2 = addRect(0,0,20,20,black, yellow);
-//    s2->setPos(100,0);
+    QPen black(Qt::black);
+    QBrush yellow(Qt::yellow);
+    QBrush red(Qt::red);
+    QBrush blue(Qt::blue);
+    QBrush darkblue(Qt::darkBlue);
+    QGraphicsRectItem* s1 = addRect(0,0,20,20,black, darkblue);
+    s1->setPos(220,0);
+    QGraphicsRectItem* s2 = addRect(0,0,20,20,black, yellow);
+    s2->setPos(230,20);
 //    QGraphicsRectItem* s3 = addRect(0,0,20,20,black, red);
 //    s3->setPos(120,0);
 //    QGraphicsRectItem* s4 = addRect(0,0,20,20,black, blue);
@@ -38,11 +38,13 @@ GameArea::GameArea(NextBlock &nextblockscene, QObject* parent):
 
 void GameArea::addTetromino()
 {
+    keyPressIgnore_ = false;
     activeTetromino_ = new Tetromino({100, 0});
     connect(activeTetromino_, &Tetromino::addSquareToScene, this, &GameArea::addSquareToScene);
     connect(activeTetromino_, &Tetromino::blockStopped, this, &GameArea::addTetromino);
     activeTetromino_->setType(nextTetromino_);
-    nextTetromino_ = QRandomGenerator::global()->bounded(16384)%7;
+//    nextTetromino_ = QRandomGenerator::global()->bounded(16384)%7;
+    nextTetromino_ = 0;
     emit tetrominoChanged(nextTetromino_);
 }
 
@@ -117,11 +119,30 @@ void GameArea::tetrominoTryRight()
 void GameArea::tetrominoTryTurn()
 {
     activeTetromino_->tetrominoTurn();
+    QPoint pos;
+    bool inArea = false;
+//    while( !inArea ) {
+        for ( QGraphicsRectItem* square : activeTetromino_->squares ) {
+            pos = getPos( square );
+            qDebug() << "sijainti: " << pos.x();
+            inArea = true;
+            if ( pos.x() < 0 ) {
+                qDebug() << "vasemmalla";
+                inArea = false;
+                activeTetromino_->moveRight();
+            }
+           else if ( pos.x() > 11 ) {
+                qDebug() << "oikealla";
+                inArea = false;
+                activeTetromino_->moveLeft();
+            }
+        }
+//    }
 }
 
 void GameArea::togglePauseSituation(bool isPaused)
 {
-//    keyPressIgnore_ = isPaused;
+    keyPressIgnore_ = isPaused;
 }
 
 QPoint GameArea::getPos(QGraphicsRectItem* item)
@@ -146,6 +167,9 @@ void GameArea::keyPressEvent(QKeyEvent * event)
             break;
         case Qt::Key_Z:
             tetrominoTryTurn();
+            break;
+        case Qt::Key_Down:
+            tetrominoFall();
             break;
         }
     }

@@ -51,7 +51,7 @@ private:
 
     blockMatrix* blockMatrixPtr_;
 
-    bool keyPressIgnore_ = false;
+    bool keyPressIgnore_ = true;
 
 signals:
     void tetrominoChanged(int nextTetromino);
