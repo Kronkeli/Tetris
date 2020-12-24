@@ -1,9 +1,9 @@
 ﻿#ifndef GAMEAREA_H
 #define GAMEAREA_H
 
-#include "tetromino.h"
-#include "blockmatrix.h"
-#include "nextblock.h"
+#include "Model/tetromino.h"
+#include "Model/blockmatrix.h"
+#include "View/nextblock.h"
 
 #include <QGraphicsScene>
 #include <map>

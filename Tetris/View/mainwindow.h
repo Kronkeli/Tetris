@@ -1,8 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "gamearea.h"
-#include "nextblock.h"
+#include "Model/gamearea.h"
+#include "View/nextblock.h"
 
 #include <QMainWindow>
 #include <QGraphicsScene>

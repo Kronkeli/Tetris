@@ -1,6 +1,6 @@
-#include "mainwindow.h"
-#include "optionsdialog.h"
-#include "enddialog.h"
+#include "View/mainwindow.h"
+#include "View/optionsdialog.h"
+#include "View/enddialog.h"
 
 #include <QDialog>
 #include <QGraphicsScene>
@@ -39,15 +39,13 @@ MainWindow::MainWindow(GameArea &scene, NextBlock &nextblockscene, QWidget *pare
 
     timer_ = new QTimer(this);
 
-    // Start button:
-    QPushButton* start_button = new QPushButton("Start");
-    qDebug() << start_button->pos();
 
     QWidget * wdg = new QWidget(this);
 
+    // The buttons on the side of the mainwindow:
     QVBoxLayout *vlay = new QVBoxLayout(wdg);
-    QPushButton *btn1 = new QPushButton("Aloita");
-    vlay->addWidget(btn1);
+    QPushButton *startBtn = new QPushButton("Aloita");
+    vlay->addWidget(startBtn);
     QPushButton *btn2 = new QPushButton("Tauko");
     vlay->addWidget(btn2);
     QPushButton *btn3 = new QPushButton("Vaikeustaso");
@@ -60,7 +58,7 @@ MainWindow::MainWindow(GameArea &scene, NextBlock &nextblockscene, QWidget *pare
     wdg->setGeometry(280,150,150,150);
 
     // Connecting signals
-    connect(btn1, &QPushButton::clicked, this, &MainWindow::startGame);
+    connect(startBtn, &QPushButton::clicked, this, &MainWindow::startGame);
     connect(btn2, &QPushButton::clicked, this, &MainWindow::pauseGame);
     connect(btn3, &QPushButton::clicked, this, &MainWindow::showOptionsDialog);
     connect(btn4, &QPushButton::clicked, this, &MainWindow::close);
@@ -103,7 +101,6 @@ void MainWindow::showOptionsDialog()
 
 void MainWindow::setDifficulty(int interval)
 {
-    qDebug() << "caihdetaan diffclty: " << interval;
     interval_ = interval;
     timer_->setInterval(interval);
 }

@@ -1,4 +1,4 @@
-#include "blockmatrix.h"
+#include "Model/blockmatrix.h"
 
 #include <vector>
 #include <QGraphicsRectItem>

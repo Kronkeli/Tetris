@@ -1,7 +1,7 @@
 #ifndef NEXTBLOCKSCENE_H
 #define NEXTBLOCKSCENE_H
 
-#include "tetromino.h"
+#include "Model/tetromino.h"
 
 #include <QGraphicsScene>
 

@@ -1,6 +1,6 @@
-#include "mainwindow.h"
-#include "gamearea.h"
-#include "nextblock.h"
+#include "View/mainwindow.h"
+#include "Model/gamearea.h"
+#include "View/nextblock.h"
 
 #include <QApplication>
 #include <QObject>

@@ -16,20 +16,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    blockmatrix.cpp \
-    enddialog.cpp \
-    gamearea.cpp \
     main.cpp \
-    mainwindow.cpp \
-    nextblock.cpp \
-    optionsdialog.cpp \
-    tetromino.cpp
+    View/enddialog.cpp \
+    View/mainwindow.cpp \
+    View/optionsdialog.cpp \
+    View/nextblock.cpp \
+    Model/gamearea.cpp \
+    Model/blockmatrix.cpp \
+    Model/tetromino.cpp
 
 HEADERS += \
-    blockmatrix.h \
-    enddialog.h \
-    gamearea.h \
-    mainwindow.h \
-    nextblock.h \
-    optionsdialog.h \
-    tetromino.h
+    View/enddialog.h \
+    View/mainwindow.h \
+    View/optionsdialog.h \
+    View/nextblock.h \
+    Model/blockmatrix.h \
+    Model/gamearea.h \
+    Model/tetromino.h

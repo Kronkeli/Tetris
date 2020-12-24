@@ -1,4 +1,4 @@
-#include "optionsdialog.h"
+#include "View/optionsdialog.h"
 
 #include <QDebug>
 #include <QMainWindow>

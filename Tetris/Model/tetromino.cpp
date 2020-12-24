@@ -1,4 +1,4 @@
-#include "tetromino.h"
+#include "Model/tetromino.h"
 
 #include <QGraphicsScene>
 #include <QRandomGenerator>

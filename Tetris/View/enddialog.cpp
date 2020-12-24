@@ -1,4 +1,4 @@
-#include "enddialog.h"
+#include "View/enddialog.h"
 
 #include <QHBoxLayout>
 #include <QPushButton>

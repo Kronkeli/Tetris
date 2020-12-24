@@ -1,5 +1,5 @@
-#include "gamearea.h"
-#include "blockmatrix.h"
+#include "Model/gamearea.h"
+#include "Model/blockmatrix.h"
 
 #include <QGraphicsScene>
 #include <QGraphicsRectItem>

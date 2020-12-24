@@ -1,4 +1,4 @@
-#include "nextblock.h"
+#include "View/nextblock.h"
 
 #include <QDebug>
 
