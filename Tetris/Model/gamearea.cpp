@@ -27,14 +27,6 @@ GameArea::GameArea(NextBlock &nextblockscene, QObject* parent):
     QBrush red(Qt::red);
     QBrush blue(Qt::blue);
     QBrush darkblue(Qt::darkBlue);
-    QGraphicsRectItem* s1 = addRect(0,0,20,20,black, darkblue);
-    s1->setPos(220,0);
-    QGraphicsRectItem* s2 = addRect(0,0,20,20,black, yellow);
-    s2->setPos(230,20);
-//    QGraphicsRectItem* s3 = addRect(0,0,20,20,black, red);
-//    s3->setPos(120,0);
-//    QGraphicsRectItem* s4 = addRect(0,0,20,20,black, blue);
-//    s4->setPos(140,0);
 }
 
 void GameArea::addTetromino()
@@ -52,13 +44,19 @@ void GameArea::addTetromino()
     emit tetrominoChanged(nextTetromino_);
 }
 
-bool GameArea::isOutOfBounds(int x)
+bool GameArea::isXOutOfBounds(int x)
 {
     return ( x < 0 or x > 220 );
 }
 
+bool GameArea::isYOutOfBounds(int y)
+{
+    return( y <= 0 or y > 479 );
+}
+
 void GameArea::tetrominoFall()
 {
+    // isBroken parameter tells if moving is possible
     bool isBroken = false;
     QPoint pos;
     for ( auto square : activeTetromino_->squares ) {
@@ -84,62 +82,113 @@ void GameArea::tetrominoFall()
     }
 }
 
-void GameArea::tetrominoTryLeft()
+bool GameArea::tetrominoTryLeft(int amount)
 {
     bool canMove = true;
     QPoint pos;
     for ( auto square : activeTetromino_->squares ) {
         pos = getPos(square);
-        if ( isOutOfBounds(square->x() - 20) ) {
+        if ( isXOutOfBounds(square->x() - amount * 20) ) {
             canMove = false;
         }
-        else if ( !blockMatrixPtr_->isSpaceAvailable( {pos.x() - 1, pos.y()} ) ) {
+        else if ( !blockMatrixPtr_->isSpaceAvailable( {pos.x() - amount, pos.y()} ) ) {
             canMove = false;
         }
     }
-    if ( canMove ) {
-        activeTetromino_->moveLeft();
-    }
+//    if ( canMove ) {
+//        activeTetromino_->moveLeft();
+//    }
+    return canMove;
 }
 
-void GameArea::tetrominoTryRight()
+bool GameArea::tetrominoTryRight(int amount)
 {
     bool canMove = true;
     QPoint pos;
+    qDebug() << "tryMoveRight ";
     for ( auto square : activeTetromino_->squares ) {
         pos = getPos(square);
-        if ( isOutOfBounds(square->x() + 20) ) {
+        qDebug() << "trytomoveright yksi square: { x : " << pos.x() << ", y : "  << pos.y() << " }";
+        if ( isXOutOfBounds(square->x() + amount * 20) ) {
             canMove = false;
         }
-        else if ( !blockMatrixPtr_->isSpaceAvailable( {pos.x() + 1, pos.y()} ) ) {
+        else if ( !blockMatrixPtr_->isSpaceAvailable( {pos.x() + amount, pos.y()} ) ) {
             canMove = false;
         }
     }
-    if ( canMove ) {
-        activeTetromino_->moveRight();
-    }
+//    if ( canMove ) {
+//        activeTetromino_->moveRight();
+//    }
+    return canMove;
 }
 
 void GameArea::tetrominoTryTurn()
 {
+    /* Palikan kääntöalgoritmi:
+     - Käännä palikkaa
+     - Jos onnistui HYVÄ
+     - Jos ei onnistu (ulkona alueesta tai palikan sisällä), kokeile kunnes onnistuu:
+       - Siirto oik 1
+       - Siirto oik 2
+       - Siirto vas 1
+       - Siirto vas 2
+       - PERUUTA KÄÄNTÖ
+*/
+    // KOkeillaan:
     activeTetromino_->tetrominoTurn();
     QPoint pos;
-    bool inArea = false;
-        for ( QGraphicsRectItem* square : activeTetromino_->squares ) {
-            pos = getPos( square );
-            qDebug() << "sijainti: " << pos.x();
-            inArea = true;
-            if ( pos.x() < 0 ) {
-                qDebug() << "vasemmalla";
-                inArea = false;
-                activeTetromino_->moveRight();
-            }
-           else if ( pos.x() > 11 ) {
-                qDebug() << "oikealla";
-                inArea = false;
-                activeTetromino_->moveLeft();
-            }
+    bool canTurnFreely = true;
+    bool YOutOfBounds = false;
+
+int helpCounter = 1;
+    for ( QGraphicsRectItem* square : activeTetromino_->squares ) {
+        qDebug() << "Kierretään palikoita " << helpCounter << "/4";
+
+        pos = getPos( square );
+        qDebug() << "sijainti : { x : " << pos.x() << ", y : " << pos.y() << " }";
+        // Check if block is out of bounds (either x or y)
+        qDebug()<< "Testataan out of bounds blokille " << helpCounter << "/4";
+        if ( isXOutOfBounds( pos.x() * 20) ) {
+            qDebug() << "x on pilalla";
+            canTurnFreely = false;
         }
+        else if ( isYOutOfBounds( pos.y() * 20) ) {
+            qDebug() << "Y on pilalla";
+            YOutOfBounds = true;
+        }
+        // Check if blocked by blocks
+        else if (not blockMatrixPtr_->isSpaceAvailable( pos ) ) {
+            canTurnFreely = false;
+        }
+        helpCounter++;
+    }
+
+    // Try wall kick
+    if ( YOutOfBounds ) {
+        qDebug() << "Y is out of bounds -> ABORT ";
+        activeTetromino_->tetrominoTurn( -1 );
+    }
+    else if (not canTurnFreely) {
+        qDebug() << "Trying wall kickeros";
+        if ( tetrominoTryRight() ) {
+            activeTetromino_->moveRight();
+        }
+        else if ( tetrominoTryRight(2) ) {
+            activeTetromino_->moveRight(2);
+        }
+        else if ( tetrominoTryLeft() ) {
+            activeTetromino_->moveLeft();
+        }
+        else if ( tetrominoTryLeft(2) ) {
+            activeTetromino_->moveLeft(2);
+        }
+        // No action can make turning possible -> UNDO TURN
+        else {
+            qDebug() << "Wall kickeros EI TOIMI";
+            activeTetromino_->tetrominoTurn( -1 );
+        }
+    }
+    qDebug() << "TRYTOTURN PÄÄSI LOPPUUN";
 }
 
 void GameArea::togglePauseSituation(bool isPaused)
@@ -156,15 +205,23 @@ QPoint GameArea::getPos(QGraphicsRectItem* item)
 
 void GameArea::keyPressEvent(QKeyEvent * event)
 {
-    if ( keyPressIgnore_ ) {
+    if ( event->key() == Qt::Key_Space ) {
+        emit pauseGame();
+    }
+    else if ( keyPressIgnore_ ) {
         event->ignore();
     }
     else {
         switch ( event->key() ) {
         case Qt::Key_Left:
-            tetrominoTryLeft();
+            if ( tetrominoTryLeft() ) {
+                activeTetromino_->moveLeft();
+            }
             break;
         case Qt::Key_Right:
+            if ( tetrominoTryRight() ) {
+                activeTetromino_->moveRight();
+            }
             tetrominoTryRight();
             break;
         case Qt::Key_Z:

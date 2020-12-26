@@ -20,32 +20,37 @@ void Tetromino::moveDown()
     weightPoint_.setY( weightPoint_.y() + 20 );
 }
 
-void Tetromino::moveLeft()
+void Tetromino::moveLeft(int amount)
 {
     for ( auto square : squares ) {
-        square->moveBy(-20, 0);
+        square->moveBy(-(amount * 20), 0);
     }
-    weightPoint_.setX( weightPoint_.x() - 20 );
+    weightPoint_.setX( weightPoint_.x() - amount * 20 );
 }
 
-void Tetromino::moveRight()
+void Tetromino::moveRight(int amount)
 {
     for ( auto square : squares ) {
-        square->moveBy(20, 0);
+        square->moveBy(amount * 20, 0);
     }
-    weightPoint_.setX( weightPoint_.x() + 20 );
+    weightPoint_.setX( weightPoint_.x() + amount * 20 );
 }
 
-void Tetromino::tetrominoTurn()
+void Tetromino::tetrominoTurn(int direction)
 {
     float dx;
     float dy;
     for ( QGraphicsRectItem* square : squares ) {
-        dx = weightPoint_.x() - square->x();
-        dy = weightPoint_.y() - square->y();
+        dx = direction * (weightPoint_.x() - square->x());
+        dy = direction * (weightPoint_.y() - square->y());
             square->setX( weightPoint_.x() + dy );
             square->setY( weightPoint_.y() - dx );
     }
+}
+
+QPointF Tetromino::getWeightPoint()
+{
+    return weightPoint_;
 }
 
 void Tetromino::setType(int number)

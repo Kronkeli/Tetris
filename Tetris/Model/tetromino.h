@@ -37,11 +37,13 @@ public:
     void setType(int number);
     void setPlace();
     void moveDown();
-    void moveLeft();
-    void moveRight();
-    void tetrominoTurn();
+    void moveLeft(int amount = 1);
+    void moveRight(int amount = 1);
+    void tetrominoTurn(int direction = 1);
+    QPointF getWeightPoint();
 
     std::vector<QGraphicsRectItem*> squares;
+
 
 signals:
     void addSquareToScene(QGraphicsRectItem* square, QPointF coord, QBrush color);

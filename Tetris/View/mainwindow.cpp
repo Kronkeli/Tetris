@@ -46,12 +46,12 @@ MainWindow::MainWindow(GameArea &scene, NextBlock &nextblockscene, QWidget *pare
     QVBoxLayout *vlay = new QVBoxLayout(wdg);
     QPushButton *startBtn = new QPushButton("Aloita");
     vlay->addWidget(startBtn);
-    QPushButton *btn2 = new QPushButton("Tauko");
-    vlay->addWidget(btn2);
-    QPushButton *btn3 = new QPushButton("Vaikeustaso");
-    vlay->addWidget(btn3);
-    QPushButton *btn4 = new QPushButton("Lopeta");
-    vlay->addWidget(btn4);
+    QPushButton *stopBtn = new QPushButton("Tauko");
+    vlay->addWidget(stopBtn);
+    QPushButton *difficultyBtn = new QPushButton("Vaikeustaso");
+    vlay->addWidget(difficultyBtn);
+    QPushButton *quitBtn = new QPushButton("Lopeta");
+    vlay->addWidget(quitBtn);
     wdg->setLayout(vlay);
 
     scene.addWidget(wdg);
@@ -59,13 +59,14 @@ MainWindow::MainWindow(GameArea &scene, NextBlock &nextblockscene, QWidget *pare
 
     // Connecting signals
     connect(startBtn, &QPushButton::clicked, this, &MainWindow::startGame);
-    connect(btn2, &QPushButton::clicked, this, &MainWindow::pauseGame);
-    connect(btn3, &QPushButton::clicked, this, &MainWindow::showOptionsDialog);
-    connect(btn4, &QPushButton::clicked, this, &MainWindow::close);
+    connect(stopBtn, &QPushButton::clicked, this, &MainWindow::pauseGame);
+    connect(difficultyBtn, &QPushButton::clicked, this, &MainWindow::showOptionsDialog);
+    connect(quitBtn, &QPushButton::clicked, this, &MainWindow::close);
     connect(this, &MainWindow::gameStarted, scene_, &GameArea::addTetromino);
     connect(timer_, &QTimer::timeout, scene_, &GameArea::tetrominoFall);
     connect(this, &MainWindow::togglePause, scene_, &GameArea::togglePauseSituation);
     connect(scene_, &GameArea::gameOver, this, &MainWindow::endGame);
+    connect(scene_, &GameArea::pauseGame, this, &MainWindow::pauseGame);
 }
 
 void MainWindow::startGame()

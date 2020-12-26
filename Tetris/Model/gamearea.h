@@ -20,10 +20,11 @@ public:
 public slots:
 
     void addTetromino();
-    bool isOutOfBounds(int x);
+    bool isXOutOfBounds(int x);
+    bool isYOutOfBounds(int y);
     void tetrominoFall();
-    void tetrominoTryLeft();
-    void tetrominoTryRight();
+    bool tetrominoTryLeft(int amount = 1);
+    bool tetrominoTryRight(int amount = 1);
     void tetrominoTryTurn();
     void togglePauseSituation(bool isPaused);
     QPoint getPos(QGraphicsRectItem* item);
@@ -43,6 +44,7 @@ private:
 
 signals:
     void tetrominoChanged(int nextTetromino);
+    void pauseGame();
     void gameOver();
 };
 
