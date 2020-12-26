@@ -21,17 +21,26 @@ MainWindow::MainWindow(GameArea &scene, NextBlock &nextblockscene, QWidget *pare
     this->resize(460,520);
     this->setMinimumSize(400,500);
 
+    // Setting background image
+    QPixmap bkgnd("../Tetris/Images/background.jpg");
+    bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
+    QPalette palette;
+    palette.setBrush(QPalette::Background, bkgnd);
+    this->setPalette(palette);
+
     // View and scene for gamearea
     view_.setScene(&scene);
     scene_ = &scene;
     view_.setGeometry(20,20,240,480);
     view_.show();
+    view_.setBackgroundBrush( QBrush(Qt::black, Qt::SolidPattern) );
 
     // View and scene for nextblock
     nextBlockView_.setScene(&nextblockscene);
     nextBlockScene_ = &nextblockscene;
     nextBlockView_.setGeometry(280, 20, 80, 80);
     nextBlockView_.show();
+    nextblockscene.setBackgroundBrush( QBrush(Qt::black, Qt::SolidPattern) );
 
 //    QTextBrowser* nextBlockText = new QTextBrowser(this);
 //    nextBlockText->setText("Seuraava:");
@@ -100,6 +109,7 @@ void MainWindow::showOptionsDialog()
         pauseGame();
     }
     OptionsDialog* dialog = new OptionsDialog(this);
+//    dialog->setPalette(QPalette(QColor(100,0,100)));
     connect(dialog, &OptionsDialog::setDifficulty, this, &MainWindow::setDifficulty );
     dialog->exec();
     pauseGame();
