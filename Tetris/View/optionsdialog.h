@@ -9,9 +9,9 @@
 
 const std::map<QString, int> DIFFICULTIES =
 {
-    {"heleppo", 100},
-    {"heleepompi", 500},
-    {"heleeeeepoin", 1000}
+    {"Vaikea", 100},
+    {"Keskitaso", 500},
+    {"Helppo", 1000}
 };
 
 class OptionsDialog : public QDialog

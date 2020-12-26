@@ -41,6 +41,7 @@ private:
     QTimer* timer_;
 
     bool isPaused_ = true;
+    bool isRunning_ = false;
 
     int interval_ = 300;
 };

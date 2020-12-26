@@ -15,9 +15,9 @@ OptionsDialog::OptionsDialog(QWidget *parent):
     QVBoxLayout *vlay = new QVBoxLayout(wdg);
 
     difficulties_ = new QComboBox(this);
-    difficulties_->addItem("heleppo");
-    difficulties_->addItem("heleepompi");
-    difficulties_->addItem("heleeeeepoin");
+    difficulties_->addItem("Vaikea");
+    difficulties_->addItem("Keskitaso");
+    difficulties_->addItem("Helppo");
     vlay->addWidget(difficulties_);
 
     QPushButton *okButton = new QPushButton("OK", this);

@@ -71,22 +71,27 @@ MainWindow::MainWindow(GameArea &scene, NextBlock &nextblockscene, QWidget *pare
 
 void MainWindow::startGame()
 {
-    timer_->start(interval_);
-    isPaused_ = false;
-    emit gameStarted();
+    if ( not isRunning_ ) {
+        timer_->start(interval_);
+        isPaused_ = false;
+        emit gameStarted();
+        isRunning_ = true;
+    }
 }
 
 void MainWindow::pauseGame()
 {
-    if ( !isPaused_) {
-        timer_->stop();
-        isPaused_ = true;
+    if ( isRunning_ ) {
+        if ( !isPaused_) {
+            timer_->stop();
+            isPaused_ = true;
+        }
+        else {
+            timer_->start(interval_);
+            isPaused_ = false;
+        }
+        emit togglePause(isPaused_);
     }
-    else {
-        timer_->start(interval_);
-        isPaused_ = false;
-    }
-    emit togglePause(isPaused_);
 }
 
 void MainWindow::showOptionsDialog()
