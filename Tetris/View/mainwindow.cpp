@@ -79,22 +79,16 @@ MainWindow::MainWindow(GameArea &scene, NextBlock &nextblockscene, QWidget *pare
     hlay->addWidget( scoreLabel_ );
     scoreWidget->setLayout( hlay );
     scene.addWidget( scoreWidget );
-    scoreWidget->setGeometry(280,450,100,50);
-//    scoreText->setGeometry(300, 400, 50,50);
-//    scoreText->setPalette(QPalette(QColor(76,0,153)));
-//    label->setStyleSheet("{color: #C0BBFE}");
+    scoreWidget->setGeometry(280,450,150,50);
 
-//    QColor color = QColorDialog::getColor(Qt::white, this);
-    QColor color(178,102,255);
-    QPalette palette2 = scoreText->palette();
-    palette2.setColor(QPalette::WindowText, color);
-    scoreText->setPalette(palette2);
-    scoreLabel_->setPalette(palette2);
-
-//            QColor color = QColorDialog::getColor(Qt::white, this);
-//            QPalette palette = ui->label->palette();
-//            palette.setColor(QPalette::WindowText, color);
-//            ui->label->setPalette(palette);
+    scoreLabel_->setStyleSheet("QLabel { background-color : black; color : white; }");
+    scoreText->setStyleSheet("QLabel { background-color : black; color : white; }");
+    scoreLabel_->setAlignment(Qt::AlignCenter);
+//    QColor color(178,102,255);
+//    QPalette palette2 = scoreText->palette();
+//    palette2.setColor(QPalette::WindowText, color);
+//    scoreText->setPalette(palette2);
+//    scoreLabel_->setPalette(palette2);
 
     // Connecting signals and slots
     connect(startBtn, &QPushButton::clicked, this, &MainWindow::startGame);
