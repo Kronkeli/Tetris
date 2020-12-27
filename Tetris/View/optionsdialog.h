@@ -11,7 +11,7 @@ const std::map<QString, int> DIFFICULTIES =
 {
     {"Vaikea", 100},
     {"Keskitaso", 500},
-    {"Helppo", 1000}
+    {"Helppo", 1500}
 };
 
 class OptionsDialog : public QDialog

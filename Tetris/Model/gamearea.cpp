@@ -74,7 +74,9 @@ void GameArea::tetrominoFall()
     }
     if ( isBroken ) {
         blockMatrixPtr_->addSquares(activeTetromino_->squares);
-        blockMatrixPtr_->checkRows();
+        int rowsDeleted = blockMatrixPtr_->checkRows();
+        addScore( rowsDeleted );
+        emit displayScore(score_);
         addTetromino();
     }
     else {
@@ -263,4 +265,32 @@ bool GameArea::isGameOver(Tetromino* tetromino)
 void GameArea::restartScene()
 {
     blockMatrixPtr_->clearData();
+}
+
+void GameArea::setDifficulty(int level)
+{
+    difficulty_ = level;
+}
+
+void GameArea::addScore(int rowsDeleted)
+{
+    // Score is calculated by the amount of line amount (more points from more lines)
+    // multiplied by diffilty level.
+    int scoreFromLines = 0;
+    switch( rowsDeleted ) {
+    case 1:
+        scoreFromLines = 40;
+        break;
+    case 2:
+        scoreFromLines = 100;
+        break;
+    case 3:
+        scoreFromLines = 300;
+        break;
+    case 4:
+        scoreFromLines = 1200;
+        break;
+    }
+    int scoreToAdd = difficulty_ * scoreFromLines;
+    score_ = score_ + scoreToAdd;
 }

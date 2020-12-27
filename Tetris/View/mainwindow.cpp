@@ -11,6 +11,7 @@
 #include <QtWidgets>
 #include <QVBoxLayout>
 #include <QKeyEvent>
+#include <QColorDialog>
 
 MainWindow::MainWindow(GameArea &scene, NextBlock &nextblockscene, QWidget *parent):
     QMainWindow(parent),
@@ -48,25 +49,54 @@ MainWindow::MainWindow(GameArea &scene, NextBlock &nextblockscene, QWidget *pare
 
     timer_ = new QTimer(this);
 
-
-    QWidget * wdg = new QWidget(this);
+    QWidget* wdg = new QWidget(this);
 
     // The buttons on the side of the mainwindow:
-    QVBoxLayout *vlay = new QVBoxLayout(wdg);
-    QPushButton *startBtn = new QPushButton("Aloita");
+    QVBoxLayout* vlay = new QVBoxLayout(wdg);
+    QPushButton* startBtn = new QPushButton("Aloita");
     vlay->addWidget(startBtn);
-    QPushButton *stopBtn = new QPushButton("Tauko");
+    QPushButton* stopBtn = new QPushButton("Tauko");
     vlay->addWidget(stopBtn);
-    QPushButton *difficultyBtn = new QPushButton("Vaikeustaso");
+    QPushButton* difficultyBtn = new QPushButton("Vaikeustaso");
     vlay->addWidget(difficultyBtn);
-    QPushButton *quitBtn = new QPushButton("Lopeta");
+    QPushButton* quitBtn = new QPushButton("Lopeta");
     vlay->addWidget(quitBtn);
     wdg->setLayout(vlay);
 
     scene.addWidget(wdg);
     wdg->setGeometry(280,150,150,150);
 
-    // Connecting signals
+    // Adding scoring scene to show players score
+    QWidget* scoreWidget = new QWidget( this );
+    QHBoxLayout* hlay = new QHBoxLayout(scoreWidget);
+    QLabel* scoreText = new QLabel( this );
+    hlay->addWidget(scoreText);
+//    scoreText->setFrameStyle(QFrame::NoFrame);
+    scoreText->setText ( "SCORE:" );
+
+    scoreLabel_ = new QLabel( this );
+    scoreLabel_->setNum(0);
+    hlay->addWidget( scoreLabel_ );
+    scoreWidget->setLayout( hlay );
+    scene.addWidget( scoreWidget );
+    scoreWidget->setGeometry(280,450,100,50);
+//    scoreText->setGeometry(300, 400, 50,50);
+//    scoreText->setPalette(QPalette(QColor(76,0,153)));
+//    label->setStyleSheet("{color: #C0BBFE}");
+
+//    QColor color = QColorDialog::getColor(Qt::white, this);
+    QColor color(178,102,255);
+    QPalette palette2 = scoreText->palette();
+    palette2.setColor(QPalette::WindowText, color);
+    scoreText->setPalette(palette2);
+    scoreLabel_->setPalette(palette2);
+
+//            QColor color = QColorDialog::getColor(Qt::white, this);
+//            QPalette palette = ui->label->palette();
+//            palette.setColor(QPalette::WindowText, color);
+//            ui->label->setPalette(palette);
+
+    // Connecting signals and slots
     connect(startBtn, &QPushButton::clicked, this, &MainWindow::startGame);
     connect(stopBtn, &QPushButton::clicked, this, &MainWindow::pauseGame);
     connect(difficultyBtn, &QPushButton::clicked, this, &MainWindow::showOptionsDialog);
@@ -76,6 +106,8 @@ MainWindow::MainWindow(GameArea &scene, NextBlock &nextblockscene, QWidget *pare
     connect(this, &MainWindow::togglePause, scene_, &GameArea::togglePauseSituation);
     connect(scene_, &GameArea::gameOver, this, &MainWindow::endGame);
     connect(scene_, &GameArea::pauseGame, this, &MainWindow::pauseGame);
+    connect(scene_, &GameArea::displayScore, this, &MainWindow::showScore);
+    connect(this, &MainWindow::changeDifficulty, scene_, &GameArea::setDifficulty);
 }
 
 void MainWindow::startGame()
@@ -119,6 +151,8 @@ void MainWindow::setDifficulty(int interval)
 {
     interval_ = interval;
     timer_->setInterval(interval);
+    qDebug() << "vaikeustaso on " << 4- (interval / 500);
+    emit changeDifficulty( 4 - (interval / 500) );
 }
 
 void MainWindow::endGame()
@@ -140,6 +174,11 @@ void MainWindow::gameOver(bool playAgain)
     else {
         close();
     }
+}
+
+void MainWindow::showScore(int scoreAmount)
+{
+    scoreLabel_->setNum( scoreAmount );
 }
 
 

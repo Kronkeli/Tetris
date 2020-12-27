@@ -14,7 +14,7 @@ public:
 
     void addSquares(std::vector<QGraphicsRectItem*> squares);
     bool isSpaceAvailable(QPoint point);
-    void checkRows();
+    int checkRows();
     bool isRowComplete();
     void deleteRow(int rowNum);
     void clearData();

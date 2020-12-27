@@ -29,6 +29,7 @@ OptionsDialog::OptionsDialog(QWidget *parent):
 void OptionsDialog::okClicked()
 {
     int interval = DIFFICULTIES.at( difficulties_->currentText() );
+    qDebug() << "lähetetään intervalli " << interval;
     emit setDifficulty(interval);
     close();
 }

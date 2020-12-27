@@ -32,10 +32,12 @@ bool blockMatrix::isSpaceAvailable(QPoint point)
     return blockMatrix_[point.y()][point.x()] == nullptr;
 }
 
-void blockMatrix::checkRows()
+int blockMatrix::checkRows()
 {
+    // Deleting rows and calculating amount for scoring
     bool rowComplete;
     std::vector<int> completeRows;
+    int rowsDeleted = 0;
 
     for ( int row = 0; row < 24; row++ ) {
         rowComplete = true;
@@ -45,9 +47,12 @@ void blockMatrix::checkRows()
             }
         }
         if ( rowComplete ) {
+            rowsDeleted++;
             deleteRow(row);
         }
     }
+    qDebug() << "rivejä tuhottiin: " << rowsDeleted;
+    return rowsDeleted;
 }
 
 void blockMatrix::deleteRow(int rowNum)

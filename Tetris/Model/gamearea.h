@@ -33,6 +33,7 @@ public slots:
     void addSquareToScene(QGraphicsRectItem* square, QPointF coord, QBrush color);
     bool isGameOver(Tetromino* tetromino);
     void restartScene();
+    void setDifficulty( int level);
 
 private:
 
@@ -41,11 +42,15 @@ private:
     int nextTetromino_;
     blockMatrix* blockMatrixPtr_;
     bool keyPressIgnore_ = true;
+    int difficulty_ = 2;
+    int score_;
+    void addScore(int rowsDeleted);
 
 signals:
     void tetrominoChanged(int nextTetromino);
     void pauseGame();
     void gameOver();
+    void displayScore(int score);
 };
 
 #endif // GAMEAREA_H

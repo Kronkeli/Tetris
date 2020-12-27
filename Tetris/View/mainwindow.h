@@ -8,6 +8,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QKeyEvent>
+#include <QLabel>
 
 class MainWindow : public QMainWindow
 {
@@ -24,11 +25,13 @@ public slots:
     void setDifficulty(int interval);
     void endGame();
     void gameOver(bool playAgain);
+    void showScore(int scoreAmount);
 
 signals:
 
     void gameStarted();
     void togglePause(bool isPaused);
+    void changeDifficulty(int level);
 
 private:
 
@@ -43,6 +46,8 @@ private:
     bool isPaused_ = true;
     bool isRunning_ = false;
 
-    int interval_ = 300;
+    int interval_ = 500;
+
+    QLabel* scoreLabel_;
 };
 #endif // MAINWINDOW_H
