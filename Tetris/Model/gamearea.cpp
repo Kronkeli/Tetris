@@ -51,7 +51,7 @@ bool GameArea::isXOutOfBounds(int x)
 
 bool GameArea::isYOutOfBounds(int y)
 {
-    return( y <= 0 or y > 479 );
+    return( y < 0 or y > 479 );
 }
 
 void GameArea::tetrominoFall()
@@ -97,9 +97,6 @@ bool GameArea::tetrominoTryLeft(int amount)
             canMove = false;
         }
     }
-//    if ( canMove ) {
-//        activeTetromino_->moveLeft();
-//    }
     return canMove;
 }
 
@@ -118,9 +115,6 @@ bool GameArea::tetrominoTryRight(int amount)
             canMove = false;
         }
     }
-//    if ( canMove ) {
-//        activeTetromino_->moveRight();
-//    }
     return canMove;
 }
 
@@ -265,6 +259,8 @@ bool GameArea::isGameOver(Tetromino* tetromino)
 void GameArea::restartScene()
 {
     blockMatrixPtr_->clearData();
+    score_ = 0;
+    emit displayScore(score_);
 }
 
 void GameArea::setDifficulty(int level)
